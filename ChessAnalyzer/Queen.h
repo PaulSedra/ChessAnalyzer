@@ -15,16 +15,11 @@ public:
         for (int i = 0; i < 8; i++) {
             if (i - position[0]) {
                 vectors.push_back(array<int, 2> {i - position[0], 0});      // horizontal
-                if ( i - position[0] + position[1] >= 0 && i - position[0] + position[1] < 8 ) {
+                if (i - position[0] + position[1] >= 0 && i - position[0] + position[1] < 8) {
                     vectors.push_back(array<int, 2> {i - position[0], i - position[0]});        // main diagonal
                 }
-                if (
-                    -i + 2 * position[0] >= 0 &&
-                    -i + 2 * position[0] < 8 &&
-                    i - position[0] + position[1] >= 0 &&
-                    i - position[0] + position[1] < 8
-                ) {
-                    vectors.push_back(array<int, 2> {-(i - position[0]), i - position[0]});     // opposite diagonal
+                if (-i + position[0] + position[1] >= 0 && -i + position[0] + position[1] < 8) {
+                    vectors.push_back(array<int, 2> {i - position[0], -i + position[0]});     // opposite diagonal
                 }
             }
             if ( i - position[1] ) {
