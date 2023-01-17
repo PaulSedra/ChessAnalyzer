@@ -9,9 +9,9 @@ class King : public ChessPiece {
     /// Moves horizontally, vertically, and diagonally by 1
     /// </summary>
 public:
-    King(int isBlack, int xPos, int yPos = -1) {
-        type = isBlack;
-        position = { xPos, yPos != -1 ? yPos : 7 - 7 * type };
+    King(int type, int xPos, int yPos = -1) {
+        code = type;
+        position = { xPos, yPos != -1 ? yPos : 7 - 7 * getTeam()};
         for (int i: array<int, 2> {-1, 1}) {
             if ( i + position[0] >= 0 && i + position[0] < 8 ) {
                 vectors.push_back(array<int, 2> {i, 0});      // horizontal
@@ -28,8 +28,12 @@ public:
         }
     }
 
-    int getType() {
-        return type;
+    int getCode() {
+        return code;    // for representation purposes
+    }
+
+    int getTeam() {
+        return code > 10;    // Black team if code > 10 else White Team
     };
 
     string getName() {
@@ -40,8 +44,14 @@ public:
         return position;
     }
 
-    vector<array<int, 2>> getLegalMoves() {
-        return vectors;
+    vector<array<int, 2>> getLegalMoves(int board[8][8]) {
+        vector<array<int, 2>> allowed;
+        for (auto vec : vectors) {
+            if (isPathClear(board, getPosition(), vec)) {
+                allowed.push_back(vec);
+            }
+        }
+        return allowed;
     }
 
     array<int, 2> moveBy(array<int, 2> vec) {
@@ -49,7 +59,7 @@ public:
     }
 
 private:
-    int type;       // 0 is white | 1 is black
+    int code;       // 0 is white | 1 is black
     string name = "King";       // Piece name
     array<int, 2> position;       // < x is set in constructor, y is 1 when black and 6 when white >
     vector<array<int, 2>> vectors;      // array of legal vector movements in the form <x, y>
